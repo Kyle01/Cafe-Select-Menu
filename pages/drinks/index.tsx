@@ -63,13 +63,11 @@ export default function Drinks() {
           </div>
           <div className="flex justify-between w-72 mt-2 mb-2">
             <p className='mr-4'>Category</p>
-            <input 
-              className='border border-black'
-              value={addCategory}
-              placeholder='E.g. Cocktails'
-              onChange={(e) => setAddCategory(e.target.value)}
-              type='text'
-            />
+            <select value={addCategory} onChange={(e) => setAddCategory(e.target.value)}>
+              <option value="Cocktails">Cocktails</option>
+              <option value="Wine">Wine</option>
+              <option value="Beer">Beer</option>
+            </select>
           </div>
           <div className="flex justify-between w-72">
             <p className='mr-4'>Description</p>
