@@ -1,13 +1,14 @@
-//@ts-nocheck
 import { useEffect, useState } from 'react'
+import { Session } from '@supabase/gotrue-js'
 import { supabase } from '../../utils/supabaseClient'
+import { MenuDrink } from '../../utils/types'
 
 export default function Drinks() {
-  const [session, setSession] = useState(null)
-  const [drinks, setDrinks] = useState([])
-  const [addName, setAddName] = useState(null)
-  const [addDescription, setAddDescription] = useState(null)
-  const [addCategory, setAddCategory] = useState(null)
+  const [session, setSession] = useState<Session | null>(null)
+  const [drinks, setDrinks] = useState<Array<MenuDrink>>([])
+  const [addName, setAddName] = useState<string>('')
+  const [addDescription, setAddDescription] = useState<string>('')
+  const [addCategory, setAddCategory] = useState<string>('')
   
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -15,22 +16,29 @@ export default function Drinks() {
   }, [])
 
   const fetchDrinks = async () => {
-    let { data: drinks, error } = await supabase.from('menu_drink').select('*').order('id', true)
+    let { data: drinks, error } = await supabase
+      .from<MenuDrink>('menu_drink')
+      .select('*')
+      .order('id')
     if (error) console.log('error', error)
-    else setDrinks(drinks)
+    else setDrinks(drinks || [])
   }
 
   const addDrink = async () => {
     let { data: drink, error } = await supabase
-      .from('menu_drink')
+      .from<MenuDrink>('menu_drink')
       .insert({
         name: addName,
         description: addDescription,
         category: addCategory
-      }, { user_email: session?.user?.email })
+        //@ts-ignore
+      }, {user_id: session?.user?.email})
       .single()
-    if (error) console.log(error.message)
-    else setDrinks([...drinks, drink])
+    if (error) {
+      console.log(error.message)
+    } else if (drink) {
+      setDrinks([...drinks, drink])
+    }
   }
 
   return (

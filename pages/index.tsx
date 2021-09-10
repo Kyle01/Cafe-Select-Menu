@@ -1,11 +1,11 @@
-//@ts-nocheck
 import { useState, useEffect } from 'react'
+import { Session } from '@supabase/gotrue-js'
 import { supabase } from '../utils/supabaseClient'
 import Auth from '../components/Auth'
 import Account from '../components/Account'
 
 export default function Home() {
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
     setSession(supabase.auth.session())
@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div className="container" style={{ padding: '50px 0 100px 0' }}>
-      {!session ? <Auth /> : <Account key={session.user.id} session={session} />}
+      {!session ? <Auth /> : <Account key={session?.user?.id} session={session} />}
     </div>
   )
 }
