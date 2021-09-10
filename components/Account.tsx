@@ -1,12 +1,15 @@
-//@ts-nocheck
+import { Session } from '@supabase/gotrue-js'
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 
-export default function Account({ session }) {
-  const [loading, setLoading] = useState(true)
-  const [username, setUsername] = useState(null)
-  const [website, setWebsite] = useState(null)
-  const [avatar_url, setAvatarUrl] = useState(null)
+interface Props {
+  session: Session
+}
+
+const Account  = ({session}: Props) => {
+  const [loading, setLoading] = useState<boolean>(true)
+  const [username, setUsername] = useState<string>('')
+  const [website, setWebsite] = useState<string>('')
 
   useEffect(() => {
     getProfile()
@@ -20,7 +23,7 @@ export default function Account({ session }) {
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`username, website, avatar_url`)
-        .eq('id', user.id)
+        .eq('id', user?.id)
         .single()
 
       if (error && status !== 406) {
@@ -30,38 +33,45 @@ export default function Account({ session }) {
       if (data) {
         setUsername(data.username)
         setWebsite(data.website)
-        setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
-      alert(error.message)
+        if(error instanceof Error) {
+          alert(error.message)
+        }
     } finally {
       setLoading(false)
     }
   }
 
-  //@ts-ignore
-  async function updateProfile({ username, website, avatar_url }) {
+  type UpdateType = {
+    username: string
+    website: string
+  }
+
+  async function updateProfile({ username, website }: UpdateType) {
     try {
-      setLoading(true)
       const user = supabase.auth.user()
 
       const updates = {
-        id: user.id,
+        id: user?.id,
         username,
         website,
-        avatar_url,
         updated_at: new Date(),
       }
 
-      let { error } = await supabase.from('profiles').upsert(updates, {
-        returning: 'minimal', // Don't return the value after inserting
+      let { error } = await supabase
+      .from('profiles')
+      .upsert(updates, {
+        returning: 'minimal'
       })
 
       if (error) {
         throw error
       }
     } catch (error) {
-      alert(error.message)
+      if(error instanceof Error) {
+        alert(error.message)
+      }
     } finally {
       setLoading(false)
     }
@@ -71,7 +81,7 @@ export default function Account({ session }) {
     <div className="form-widget">
       <div>
         <label htmlFor="email" className='text-blue-400'>Email</label>
-        <input id="email" type="text" value={session.user.email} disabled />
+        <input id="email" type="text" value={session?.user?.email} />
       </div>
       <div>
         <label htmlFor="username">Name</label>
@@ -91,17 +101,15 @@ export default function Account({ session }) {
           onChange={(e) => setWebsite(e.target.value)}
         />
       </div>
-
       <div>
         <button
           className="button block primary"
-          onClick={() => updateProfile({ username, website, avatar_url })}
+          onClick={() => updateProfile({ username, website })}
           disabled={loading}
         >
           {loading ? 'Loading ...' : 'Update'}
         </button>
       </div>
-
       <div>
         <button className="button block" onClick={() => supabase.auth.signOut()}>
           Sign Out
@@ -110,3 +118,5 @@ export default function Account({ session }) {
     </div>
   )
 }
+
+export default Account

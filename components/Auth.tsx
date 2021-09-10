@@ -1,9 +1,8 @@
-//@ts-nocheck
 import { useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
 
 export default function Auth() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [email, setEmail] = useState('')
 
   const handleLogin = async (email: string) => {
@@ -13,7 +12,9 @@ export default function Auth() {
       if (error) throw error
       alert('Check your email for the login link!')
     } catch (error) {
-      alert(error.error_description || error.message)
+      if(error instanceof Error) {
+        alert(error.message)
+      }
     } finally {
       setLoading(false)
     }
