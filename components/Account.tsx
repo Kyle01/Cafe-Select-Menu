@@ -2,7 +2,11 @@ import { Session } from '@supabase/gotrue-js'
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 
-const Account  = (session: Session) => {
+interface Props {
+  session: Session
+}
+
+const Account  = ({session}: Props) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [username, setUsername] = useState<string>('')
   const [website, setWebsite] = useState<string>('')
