@@ -7,12 +7,12 @@ export default function Drinks() {
   const [drinks, setDrinks] = useState<Array<MenuDrink>>([])
   
   useEffect(() => {
-    fetchDrinks()
+    fetchItems()
   }, [])
 
-  const fetchDrinks = async () => {
+  const fetchItems = async () => {
     let { data: drinks, error } = await supabase
-      .from<MenuDrink>('menu_drink')
+      .from<MenuDrink>('menu_item')
       .select('*')
       .order('id')
     if (error) console.log('error', error)

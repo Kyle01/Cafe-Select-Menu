@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Session } from '@supabase/gotrue-js'
 import { supabase } from '../../utils/supabaseClient'
-import { MenuDrink } from '../../utils/types'
+import { MenuItem } from '../../utils/types'
+import _ from 'lodash'
 
 export default function Drinks() {
   const [session, setSession] = useState<Session | null>(null)
-  const [drinks, setDrinks] = useState<Array<MenuDrink>>([])
+  const [drinks, setDrinks] = useState<Array<MenuItem>>([])
   const [addName, setAddName] = useState<string>('')
   const [addDescription, setAddDescription] = useState<string>('')
-  const [addCategory, setAddCategory] = useState<string>('')
+  const [addCategory, setAddCategory] = useState<string>('Cocktails')
   
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -17,7 +18,7 @@ export default function Drinks() {
 
   const fetchDrinks = async () => {
     let { data: drinks, error } = await supabase
-      .from<MenuDrink>('menu_drink')
+      .from<MenuItem>('menu_item')
       .select('*')
       .order('id')
     if (error) console.log('error', error)
@@ -26,7 +27,7 @@ export default function Drinks() {
 
   const addDrink = async () => {
     let { data: drink, error } = await supabase
-      .from<MenuDrink>('menu_drink')
+      .from<MenuItem>('menu_item')
       .insert({
         name: addName,
         description: addDescription,
@@ -41,13 +42,38 @@ export default function Drinks() {
     }
   }
 
+  const deleteDrink = async (id: string) => {
+    let { data: drink, error } = await supabase
+      .from<MenuItem>('menu_item')
+      .delete()
+      .match({ id }
+        //@ts-ignore
+      , {user_id: session?.user?.email})
+    if (error) {
+      console.log(error.message)
+    } else if (drink) {
+      const newDrinks = _.reject(drinks, (d) => d.id === id)
+      console.log(newDrinks)
+      setDrinks(newDrinks)
+    }
+  }
+
   return (
       <div className='m-4'>
           <h1 className='text-2xl mt-4 mb-4'>Drinks</h1>
           {drinks.map((drink) => (
-            <div key={drink.id} className='mt-2 mb-2'>
-              <p>{drink.name}</p>
-              <p>{drink.description}</p>
+            <div className='flex' key={drink.id}>
+              <div className='mt-2 mb-2'>
+                <p>{drink.name}</p>
+                <p>{drink.description}</p>
+                <p>Category: {drink.category}</p>
+              </div>
+              <button 
+                className='bg-paleBlue-medium hover:bg-paleBlue-dark text-white font-bold py-2 px-4 rounded m-4'
+                onClick={() => deleteDrink(drink.id)}
+              >
+                Delete
+              </button>
             </div>
           ))}
           <h1 className='text-2xl mt-4 mb-4'>Add Drinks</h1>
@@ -81,7 +107,7 @@ export default function Drinks() {
           </div>
           <button 
             onClick={addDrink}
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4'
+            className='bg-midnightBlue-medium hover:bg-midnightBlue-dark text-white font-bold py-2 px-4 rounded m-4'
           >
             Submit
           </button>

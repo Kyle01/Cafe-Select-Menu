@@ -1,4 +1,4 @@
-export type MenuDrink = {
+export type MenuItem = {
     id: string
     name: string
     description?: string
