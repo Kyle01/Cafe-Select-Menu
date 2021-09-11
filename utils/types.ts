@@ -5,3 +5,10 @@ export type MenuItem = {
     category: string
     inventory: number
 }
+
+export const CATEGORIES = [
+    "Cocktails",
+    "Wine",
+    "Beer"
+]
+Object.freeze(CATEGORIES)

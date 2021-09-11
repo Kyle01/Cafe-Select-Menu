@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../utils/supabaseClient'
-import { MenuDrink } from '../../utils/types'
+import { MenuItem } from '../../utils/types'
 import _ from 'lodash'
 
 export default function Drinks() {
-  const [drinks, setDrinks] = useState<Array<MenuDrink>>([])
+  const [drinks, setDrinks] = useState<Array<MenuItem>>([])
   
   useEffect(() => {
     fetchItems()
@@ -12,7 +12,7 @@ export default function Drinks() {
 
   const fetchItems = async () => {
     let { data: drinks, error } = await supabase
-      .from<MenuDrink>('menu_item')
+      .from<MenuItem>('menu_item')
       .select('*')
       .order('id')
     if (error) console.log('error', error)

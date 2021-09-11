@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Session } from '@supabase/gotrue-js'
 import { supabase } from '../../utils/supabaseClient'
-import { MenuItem } from '../../utils/types'
+import { CATEGORIES, MenuItem } from '../../utils/types'
 import _ from 'lodash'
 
 export default function Drinks() {
@@ -9,7 +9,7 @@ export default function Drinks() {
   const [drinks, setDrinks] = useState<Array<MenuItem>>([])
   const [addName, setAddName] = useState<string>('')
   const [addDescription, setAddDescription] = useState<string>('')
-  const [addCategory, setAddCategory] = useState<string>('Cocktails')
+  const [addCategory, setAddCategory] = useState<string>(CATEGORIES[0])
   
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -87,12 +87,16 @@ export default function Drinks() {
               type='text'
             />
           </div>
-          <div className="flex justify-between w-72 mt-2 mb-2">
-            <p className='mr-4'>Category</p>
-            <select value={addCategory} onChange={(e) => setAddCategory(e.target.value)}>
-              <option value="Cocktails">Cocktails</option>
-              <option value="Wine">Wine</option>
-              <option value="Beer">Beer</option>
+          <div className="flex w-72 mt-2 mb-2">
+            <p className='mr-8'>Category</p>
+            <select 
+              className='border'
+              value={addCategory} 
+              onChange={(e) => setAddCategory(e.target.value)}
+            >
+              {CATEGORIES.map((category) => (
+                <option value={category} key={category}>{category}</option>
+              ))}
             </select>
           </div>
           <div className="flex justify-between w-72">
