@@ -22,7 +22,7 @@ export default function Drinks() {
   }
 
   return (
-      <body className='bg-paleBlue-light m-0'>
+      <body className='bg-paleBlue-light m-0 w-screen h-screen'>
           <div className='bg-paleBlue-medium p-4'>
             {cocktailPillActive && 
               <button 
