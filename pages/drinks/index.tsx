@@ -22,8 +22,8 @@ export default function Drinks() {
   }
 
   return (
-      <body className='bg-paleBlue-light m-0 w-screen h-screen'>
-          <div className='bg-paleBlue-medium p-4'>
+      <body className='bg-darkGreen-light m-0 w-screen h-screen'>
+          <div className='bg-darkGreen-medium p-4'>
             {cocktailPillActive && 
               <button 
                 className="py-1 px-2 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
