@@ -6,6 +6,12 @@ export type MenuItem = {
     inventory: number
 }
 
+export type Restaurant = {
+    id: string
+    name: string,
+    about_section: string
+}
+
 export const CATEGORIES = [
     "Cocktails",
     "Wine",

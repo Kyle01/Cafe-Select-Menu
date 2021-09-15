@@ -20,6 +20,12 @@ export default function AdminHeader() {
                 <Link href={routes.ADMIN_CREATE}>
                     <li className={path.includes('create') ? activeStyle : inActiveStyle}>Add item</li>
                 </Link>
+                <Link href={routes.ADMIN_CATEGORIES}>
+                    <li className={path.includes('categories') ? activeStyle : inActiveStyle}>Categories</li>
+                </Link>
+                <Link href={routes.ADMIN_DETAILS}>
+                    <li className={path.includes('restaurant_details') ? activeStyle : inActiveStyle}>Restaurant Details</li>
+                </Link>
             </ul>
         </div>
     )

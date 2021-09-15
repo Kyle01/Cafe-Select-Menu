@@ -5,7 +5,7 @@ import { MenuItem } from '../../utils/types'
 import _ from 'lodash'
 import AdminHeader from '../../components/AdminHeader'
 
-export default function Drinks() {
+export default function Items() {
   const [session, setSession] = useState<Session | null>(null)
   const [drinks, setDrinks] = useState<Array<MenuItem>>([])
   
