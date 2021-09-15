@@ -3,8 +3,16 @@ import { Session } from '@supabase/gotrue-js'
 import { supabase } from '../../utils/supabaseClient'
 import { Restaurant } from '../../utils/types'
 import AdminHeader from '../../components/AdminHeader'
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+
+const ReactQuill = dynamic(
+    () => {
+      return import('react-quill');
+    },
+    { ssr: false }
+);
+
 
 export default function RestaurantDetails() {
   const [_session, setSession] = useState<Session | null>(null)
