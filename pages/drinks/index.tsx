@@ -39,28 +39,28 @@ export default function Drinks() {
             />
           </div>
           <div className ='p-4 '>
-            <h1 className='text-4xl mt-4 mb-4'>Drinks</h1>
-            <h2 className='text-2xl mt-4 mb-4'>Cocktails</h2>
+            <h1 className='text-4xl mt-4 mb-4 font-title'>Drinks</h1>
+            <h2 className='text-2xl mt-4 mb-4 font-extrabold'>Cocktails</h2>
             {_.filter(drinks, (item) => item.category.toLocaleLowerCase() === 'Cocktails'.toLocaleLowerCase())
               .map((drink) => (
               <div key={drink.id} className='mt-2 mb-2'>
-                <p className='font-bold'>{drink.name}</p>
+                <p className='font-header text-2xl'>{drink.name}</p>
                 <p className='mb-4'>{drink.description}</p>
               </div>
             ))}
-            {!cocktailPillActive && <h2 className='text-2xl mt-4 mb-4'>Wine</h2>}
+            {!cocktailPillActive && <h2 className='text-2xl mt-4 mb-4 font-extrabold'>Wine</h2>}
             {!cocktailPillActive && _.filter(drinks, (item) => item.category.toLocaleLowerCase() === 'Wine'.toLocaleLowerCase())
               .map((drink) => (
               <div key={drink.id} className='mt-2 mb-2'>
-                <p className='font-bold'>{drink.name}</p>
+                <p className='font-header text-2xl'>{drink.name}</p>
                 <p className='mb-4'>{drink.description}</p>
               </div>
             ))}
-            {!cocktailPillActive && <h2 className='text-2xl mt-4 mb-4'>Beer</h2>}
+            {!cocktailPillActive && <h2 className='text-2xl mt-4 mb-4 font-extrabold'>Beer</h2>}
             {!cocktailPillActive && _.filter(drinks, (item) => item.category.toLocaleLowerCase() === 'Beer'.toLocaleLowerCase())
               .map((drink) => (
               <div key={drink.id} className='mt-2 mb-2'>
-                <p className='font-bold'>{drink.name}</p>
+                <p className='font-header text-2xl'>{drink.name}</p>
                 <p className='mb-4'>{drink.description}</p>
               </div>
             ))}
