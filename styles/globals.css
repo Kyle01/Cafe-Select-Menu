@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Berolina";
+    src: url("/fonts/Berolina.ttf");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Bitter";
+    src: url("/fonts/Bitter-VariableFont_wght.ttf");
+    font-style: medium;
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Boecklins";
+    src: url("/fonts/Boecklins Universe.ttf");
+    font-style: medium;
+    font-weight: 400;
+    font-display: swap;
+}
+  
