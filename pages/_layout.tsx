@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Link from "next/link";
 
 type Props = {
     children: JSX.Element
@@ -28,7 +27,9 @@ export default function Layout({ children }: Props) {
             crossOrigin=""
           />
         </Head>
-            <main>{children}</main>
+            <body style={{backgroundColor: '#A2B9A9'}}>
+              <main>{children}</main>
+            </body>
         </div>
     )
 }

@@ -12,6 +12,13 @@ export type Restaurant = {
     about_section: string
 }
 
+export type Category = {
+    id: string 
+    name: string
+    path: string
+    has_header: boolean
+}
+
 export const CATEGORIES = [
     "Cocktails",
     "Wine",

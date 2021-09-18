@@ -22,7 +22,7 @@ export default function Drinks() {
   }
 
   return (
-      <body className='bg-darkGreen-light m-0 w-screen h-screen'>
+      <div className='bg-darkGreen-light m-0 w-screen h-screen'>
           <div className='bg-darkGreen-medium p-4'>
             {cocktailPillActive && 
               <button 
@@ -65,6 +65,6 @@ export default function Drinks() {
               </div>
             ))}
           </div>
-      </body>
+      </div>
   )
 }
