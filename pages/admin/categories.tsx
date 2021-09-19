@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Session } from '@supabase/gotrue-js'
 import { supabase } from '../../utils/supabaseClient'
 import { Category } from '../../utils/types'
+import _ from 'lodash'
 import CategoryTree from '../../components/CategoryTree'
 import AdminHeader from '../../components/AdminHeader'
 
@@ -65,18 +66,33 @@ export default function Categories() {
     }
   }
 
+  const deleteNode = async (id: string) => {
+    let { data: category, error } = await supabase
+      .from<Category>('category')
+      .delete()
+      .match({ id }
+        //@ts-ignore
+      , {user_id: session?.user?.email})
+    if (error) {
+      console.log(error.message)
+    } else if (category) {
+      const newCategory = _.reject(categories, (d) => d.id === id)
+      setCategories(newCategory)
+    }
+  }
+
   return (
       <div className='m-4'>
           <AdminHeader />
           <h1 className='text-2xl mt-4 mb-4'>Categories</h1>
-          {CategoryTree({tree: categories})}
+          {CategoryTree({tree: categories, onDelete: deleteNode})}
           <h1 className='text-2xl mt-4 mb-4'>Add Category</h1>
           <div className="flex justify-between w-72">
             <p className='mr-4'>Name</p>
             <input 
               className='border border-black'
               value={addName}
-              placeholder='E.g. Manhattan'
+              placeholder='E.g. Cocktails'
               onChange={(e) => setAddName(e.target.value)}
               type='text'
             />
