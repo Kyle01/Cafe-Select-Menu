@@ -34,7 +34,6 @@ export default function Items() {
       console.log(error.message)
     } else if (drink) {
       const newDrinks = _.reject(drinks, (d) => d.id === id)
-      console.log(newDrinks)
       setDrinks(newDrinks)
     }
   }
