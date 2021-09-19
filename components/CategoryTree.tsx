@@ -23,7 +23,7 @@ const About = ({
                 const nodeLevel = level(node) - 1
                 
                 return (
-                    <div className='flex justify-between max-w-xl mt-4 mb-4'>
+                    <div className='flex justify-between max-w-xl mt-4 mb-4' key={node.name}>
                         <div className={`ml-${(nodeLevel) * 4} text-xl flex items-center`}>
                             <p className='mr-2'>{nodeLevel > 0 ? '|_' : null}</p>
                             <p className='pt-2'>{node.name}</p>
