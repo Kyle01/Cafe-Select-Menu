@@ -21,17 +21,15 @@ export default function Categories() {
   }, [])
 
   const getAddPath = ():string  => {
-    const addValue = String((categories.length + 1))
-    
     if(addParentCategory === TOP_LEVEL){
-      return addValue
+      return addName
     } else {
       const parentNode = categories.find((c) => c.name === addParentCategory)
 
       if(!parentNode) {
-        return addValue
+        return addName
       } else {
-        return `${parentNode.path}.${addValue}`
+        return `${parentNode.path}.${addName}`
       }
     }
 
