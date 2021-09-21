@@ -16,6 +16,7 @@ export type Category = {
     id: string 
     name: string
     path: string
+    level: number
     has_header: boolean
 }
 
