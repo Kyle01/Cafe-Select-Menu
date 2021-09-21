@@ -1,5 +1,6 @@
 export enum routes {
-    MENU_HOME = '/home',
+    HOME = '/home',
+    MENU = '/menu',
     ADMIN_ITEMS = '/admin/items',
     ADMIN_CREATE = '/admin/create',
     ADMIN_CATEGORIES = '/admin/categories',
