@@ -20,20 +20,17 @@ export default function Categories() {
     fetchCategories()
   }, [])
 
-  const getAddPathTail = () => (
-    String((categories.length + 1)).padStart(4, "0")
-  )
-
   const getAddPath = ():string  => {
+    const addString = String(categories.length + 1)
     if(addParentCategory === TOP_LEVEL){
-      return getAddPathTail()
+      return addString
     } else {
       const parentNode = categories.find((c) => c.name === addParentCategory)
 
       if(!parentNode) {
-        return getAddPathTail()
+        return addString
       } else {
-        return `${parentNode.path}.${getAddPathTail()}`
+        return `${parentNode.path}.${addString}`
       }
     }
 

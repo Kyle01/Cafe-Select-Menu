@@ -2,8 +2,7 @@ export type MenuItem = {
     id: string
     name: string
     description?: string
-    category: string
-    inventory: number
+    category?: Category
 }
 
 export type Restaurant = {
@@ -16,12 +15,7 @@ export type Category = {
     id: string 
     name: string
     path: string
+    level: number
     has_header: boolean
+    menu_item?: Array<MenuItem>
 }
-
-export const CATEGORIES = [
-    "Cocktails",
-    "Wine",
-    "Beer"
-]
-Object.freeze(CATEGORIES)

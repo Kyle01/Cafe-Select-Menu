@@ -26,6 +26,9 @@ export default function AdminHeader() {
                 <Link href={routes.ADMIN_DETAILS}>
                     <li className={path.includes('restaurant_details') ? activeStyle : inActiveStyle}>Restaurant Details</li>
                 </Link>
+                <Link href={routes.HOME}>
+                    <li className={inActiveStyle}>Menu</li>
+                </Link>
             </ul>
         </div>
     )
