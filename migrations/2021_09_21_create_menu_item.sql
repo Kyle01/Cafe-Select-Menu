@@ -3,8 +3,6 @@ create table menu_item (
   category_id uuid not null,
   name varchar(255) not null,
   description text,
-  category varchar(255) not null,
-  inventory_count int not null default 1,
   inserted_at timestamp with time zone default timezone('utc'::text, now()) not null,
   FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE
 );

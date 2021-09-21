@@ -17,7 +17,18 @@ export default function Items() {
   const fetchDrinks = async () => {
     let { data: drinks, error } = await supabase
       .from<MenuItem>('menu_item')
-      .select('*')
+      .select(`
+        id,
+        name,
+        description,
+        category (
+          id,
+          name,
+          path,
+          level,
+          has_header
+        )
+      `)
       .order('id')
     if (error) console.log('error', error)
     else setDrinks(drinks || [])
@@ -47,7 +58,7 @@ export default function Items() {
               <div className='mt-2 mb-2'>
                 <p>{drink.name}</p>
                 <p>{drink.description}</p>
-                <p>Category: {drink.category}</p>
+                <p>Category: {drink.category?.name}</p>
               </div>
               <button 
                 className='bg-paleBlue-medium hover:bg-paleBlue-dark text-white font-bold py-2 px-4 rounded m-4'

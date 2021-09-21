@@ -41,7 +41,7 @@ export default function Drinks() {
           <div className ='p-4 '>
             <h1 className='text-4xl mt-4 mb-4 font-title'>Drinks</h1>
             <h2 className='text-2xl mt-4 mb-4 font-extrabold'>Cocktails</h2>
-            {_.filter(drinks, (item) => item.category.toLocaleLowerCase() === 'Cocktails'.toLocaleLowerCase())
+            {/* {_.filter(drinks, (item) => item.category.toLocaleLowerCase() === 'Cocktails'.toLocaleLowerCase())
               .map((drink) => (
               <div key={drink.id} className='mt-2 mb-2'>
                 <p className='font-header text-2xl'>{drink.name}</p>
@@ -63,7 +63,7 @@ export default function Drinks() {
                 <p className='font-header text-2xl'>{drink.name}</p>
                 <p className='mb-4'>{drink.description}</p>
               </div>
-            ))}
+            ))} */}
           </div>
       </div>
   )
