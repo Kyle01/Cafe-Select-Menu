@@ -57,7 +57,7 @@ export default function Drinks() {
               </button>
             }
             {_.filter(categories, (category) => (category.level === 2)).map((category) => (
-                <div className='flex'>
+                <div className='flex' key={category.id}>
                   <Pill 
                     active={cocktailPillActive}
                     onClick={() => setCocktailPillActive(!cocktailPillActive)}
