@@ -7,15 +7,15 @@ import AdminHeader from '../../components/AdminHeader'
 
 export default function Items() {
   const [session, setSession] = useState<Session | null>(null)
-  const [drinks, setDrinks] = useState<Array<MenuItem>>([])
+  const [items, setItems] = useState<Array<MenuItem>>([])
   
   useEffect(() => {
     setSession(supabase.auth.session());
-    fetchDrinks()
+    fetchItems()
   }, [])
 
-  const fetchDrinks = async () => {
-    let { data: drinks, error } = await supabase
+  const fetchItems = async () => {
+    let { data: items, error } = await supabase
       .from<MenuItem>('menu_item')
       .select(`
         id,
@@ -30,12 +30,12 @@ export default function Items() {
         )
       `)
       .order('id')
-    if (error) console.log('error', error)
-    else setDrinks(drinks || [])
+    if (error) alert(error)
+    else setItems(items || [])
   }
 
-  const deleteDrink = async (id: string) => {
-    let { data: drink, error } = await supabase
+  const deleteItem = async (id: string) => {
+    let { data: item, error } = await supabase
       .from<MenuItem>('menu_item')
       .delete()
       .match({ id }
@@ -43,9 +43,9 @@ export default function Items() {
       , {user_id: session?.user?.email})
     if (error) {
       console.log(error.message)
-    } else if (drink) {
-      const newDrinks = _.reject(drinks, (d) => d.id === id)
-      setDrinks(newDrinks)
+    } else if (item) {
+      const newItems = _.reject(items, (d) => d.id === id)
+      setItems(newItems)
     }
   }
 
@@ -53,16 +53,16 @@ export default function Items() {
       <div className='m-4'>
           <AdminHeader />
           <h1 className='text-2xl mt-4 mb-4'>Drinks</h1>
-          {drinks.map((drink) => (
-            <div className='flex' key={drink.id}>
+          {items.map((item) => (
+            <div className='flex' key={item.id}>
               <div className='mt-2 mb-2'>
-                <p>{drink.name}</p>
-                <p>{drink.description}</p>
-                <p>Category: {drink.category?.name}</p>
+                <p>{item.name}</p>
+                <p>{item.description}</p>
+                <p>Category: {item.category?.name}</p>
               </div>
               <button 
                 className='bg-paleBlue-medium hover:bg-paleBlue-dark text-white font-bold py-2 px-4 rounded m-4'
-                onClick={() => deleteDrink(drink.id)}
+                onClick={() => deleteItem(item.id)}
               >
                 Delete
               </button>

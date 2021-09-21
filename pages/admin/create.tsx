@@ -23,7 +23,10 @@ export default function Create() {
       .select('*')
       .order('id')
     if (error) console.log('error', error)
-    else setCategories(categories || [])
+    else if(categories) {
+      setCategories(categories || [])
+      setAddCategory(categories[0].name)
+    }
   }
   
   const addMenuItem = async () => {
@@ -43,7 +46,7 @@ export default function Create() {
         alert('Menu item added')
       }
   }
-  
+
   return (
       <div className='m-4'>
           <AdminHeader />
