@@ -56,6 +56,17 @@ export default function Drinks() {
     return c.path.includes(filteredCategory?.path)
   })
 
+  const showHeader = (category: Category) => {
+    if(!category.has_header) return false 
+    const categoryItems = _.filter(items, (item) => (
+      item.category?.path.includes(category.path)
+    ))
+    if(categoryItems.length < 1) return false 
+    if(category.level <= (filteredCategory?.level || 0)) return false 
+
+    return true
+  }
+
   return (
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
           <div className='bg-darkGreen-medium p-4 flex'>
@@ -93,7 +104,7 @@ export default function Drinks() {
 
               return (
                 <div key={category.id}>
-                  {category.has_header && <p className='text-2xl mt-4 mb-4 font-extrabold'>{category.name}</p>}
+                  {showHeader(category) && <p className='text-2xl mt-4 mb-4 font-extrabold'>{category.name}</p>}
                   {categoryItems.map((item) => (
                     //@ts-ignore
                     <div key={item.id}>
