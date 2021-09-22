@@ -7,8 +7,8 @@ import _ from 'lodash'
 export default function Drinks() {
   const [categories, setCategories] = useState<Array<Category>>([])
   const [items, setItems] = useState<Array<MenuItem>>([])
-  const [cocktailPillActive, setCocktailPillActive] = useState<boolean>(false)
-  
+  const [filteredCategory, setFilteredCategory] = useState<Category | null>(null)
+
   useEffect(() => {
     fetchItems()
     fetchCategories()
@@ -45,22 +45,51 @@ export default function Drinks() {
     } 
   }
 
+  const availableFilters = _.filter(categories, (c) => {
+    const currentLevel = (filteredCategory?.level || 0) 
+    return c.level === currentLevel + 1 && c.path.includes(filteredCategory?.path || '')
+  })
+
+  const filteredCategories = _.filter(categories, (c) => {
+    if (!filteredCategory) return true
+    
+    return c.path.includes(filteredCategory?.path)
+  })
+
+  const showHeader = (category: Category) => {
+    if(!category.has_header) return false 
+    const categoryItems = _.filter(items, (item) => (
+      item.category?.path.includes(category.path)
+    ))
+    if(categoryItems.length < 1) return false 
+    if(category.level <= (filteredCategory?.level || 0)) return false 
+
+    return true
+  }
+
   return (
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
           <div className='bg-darkGreen-medium p-4 flex'>
-            {cocktailPillActive && 
+            {filteredCategory && 
               <button 
                 className="py-1 px-2 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
-                onClick={() => setCocktailPillActive(false)}
+                onClick={() => setFilteredCategory(null)}
               >
                 X
               </button>
             }
-            {_.filter(categories, (category) => (category.level === 2)).map((category) => (
+            {filteredCategory && 
+              <Pill
+                active={true}
+                onClick={() => setFilteredCategory(null)}
+                text={filteredCategory.name}
+              />
+            }
+            {availableFilters.map((category) => (
                 <div className='flex' key={category.id}>
                   <Pill 
-                    active={cocktailPillActive}
-                    onClick={() => setCocktailPillActive(!cocktailPillActive)}
+                    active={false}
+                    onClick={() => setFilteredCategory(category)}
                     text={category.name}
                   />
                 </div>
@@ -68,21 +97,20 @@ export default function Drinks() {
             }
           </div>
           <div className ='p-4 '>
-            {categories.sort((a,b) => a.path < b.path ? -1 : 1).map((category) => {
-              if(!category.has_header) return null
-              
-              const filteredItems = _.filter(items, (item) => (
-                item.category?.path === category.path
+            {filteredCategories.sort((a,b) => a.path < b.path ? -1 : 1).map((category) => {             
+              const categoryItems = _.filter(items, (item) => (
+                item.category?.path.includes(category.path) && item.category.level === category.level
               ))
 
-              if(filteredItems.length < 1) return null
-                         
               return (
                 <div key={category.id}>
-                  <p className='text-2xl mt-4 mb-4 font-extrabold'>{category.name}</p>
-                  {filteredItems.map((item) => (
+                  {showHeader(category) && <p className='text-2xl mt-4 mb-4 font-extrabold'>{category.name}</p>}
+                  {categoryItems.map((item) => (
+                    //@ts-ignore
                     <div key={item.id}>
+                      {/* @ts-ignore */}
                       <p className='font-header text-2xl'>{item.name}</p>
+                      {/* @ts-ignore */}
                       <p className='mb-4'>{item.description}</p>
                     </div>
                   ))}
