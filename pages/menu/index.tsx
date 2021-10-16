@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import Pill from '../../components/Pill'
 import { Category, MenuItem } from '../../utils/types'
+import NestedTags from '../../components/NestTags'
 import _ from 'lodash'
 
 export default function Drinks() {
@@ -70,7 +71,8 @@ export default function Drinks() {
   return (
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
           <div className='bg-darkGreen-medium p-4 flex'>
-            {filteredCategory && 
+            <NestedTags items={['Drinks', 'Wine', 'Red']} />
+            {/* {filteredCategory && 
               <button 
                 className="py-1 px-2 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
                 onClick={() => setFilteredCategory(null)}
@@ -94,7 +96,7 @@ export default function Drinks() {
                   />
                 </div>
               ))
-            }
+            } */}
           </div>
           <div className ='p-4 '>
             {filteredCategories.sort((a,b) => a.path < b.path ? -1 : 1).map((category) => {             
