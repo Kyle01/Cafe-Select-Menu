@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import Pill from '../../components/Pill'
 import { Category, MenuItem } from '../../utils/types'
-import NestedTags from '../../components/NestTags'
+import { NestedTags } from '../../components/NestedTags'
 import _ from 'lodash'
 
 export default function Drinks() {
@@ -71,7 +71,7 @@ export default function Drinks() {
   return (
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
           <div className='bg-darkGreen-medium p-4 flex'>
-            <NestedTags items={['Drinks', 'Wine', 'Red']} />
+            <NestedTags items={[{text: 'Drinks'}, {text: 'Wine'}, {text: 'Red'}]} />
             {/* {filteredCategory && 
               <button 
                 className="py-1 px-2 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
