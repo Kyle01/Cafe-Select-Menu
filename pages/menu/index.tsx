@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { supabase } from '../../utils/supabaseClient'
 import Pill from '../../components/Pill'
 import { Category, MenuItem } from '../../utils/types'
 import { NestedTags } from '../../components/NestedTags'
+import { routes } from '../../utils/routes'
 import _ from 'lodash'
 
 export default function Drinks() {
+  const router = useRouter()
   const [categories, setCategories] = useState<Array<Category>>([])
   const [items, setItems] = useState<Array<MenuItem>>([])
   const [filteredCategory, setFilteredCategory] = useState<Category | null>(null)
+  const { tags } = router.query
 
   useEffect(() => {
     fetchItems()
@@ -46,6 +50,21 @@ export default function Drinks() {
     } 
   }
 
+  const onSetFilter = (category: Category | null) => {
+    setFilteredCategory(category)
+
+    if(category) {
+      if(tags) {
+        const newUrl = `tags=${tags},${category.name}`
+        router.replace({pathname: routes.MENU, query: newUrl})
+      } else {
+        router.replace({pathname: routes.MENU, query: {tags: category.name}})
+      }
+    } else {
+      router.replace({pathname: routes.MENU})
+    }
+  }
+
   const availableFilters = _.filter(categories, (c) => {
     const currentLevel = (filteredCategory?.level || 0) 
     return c.level === currentLevel + 1 && c.path.includes(filteredCategory?.path || '')
@@ -72,10 +91,10 @@ export default function Drinks() {
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
           <div className='bg-darkGreen-medium p-4 flex'>
             <NestedTags items={[{text: 'Drinks'}, {text: 'Wine'}, {text: 'Red'}]} />
-            {/* {filteredCategory && 
+            {filteredCategory && 
               <button 
-                className="py-1 px-2 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
-                onClick={() => setFilteredCategory(null)}
+                className="px-1 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
+                onClick={() => onSetFilter(null)}
               >
                 X
               </button>
@@ -83,7 +102,7 @@ export default function Drinks() {
             {filteredCategory && 
               <Pill
                 active={true}
-                onClick={() => setFilteredCategory(null)}
+                onClick={() => onSetFilter(null)}
                 text={filteredCategory.name}
               />
             }
@@ -91,12 +110,12 @@ export default function Drinks() {
                 <div className='flex' key={category.id}>
                   <Pill 
                     active={false}
-                    onClick={() => setFilteredCategory(category)}
+                    onClick={() => onSetFilter(category)}
                     text={category.name}
                   />
                 </div>
               ))
-            } */}
+            }
           </div>
           <div className ='p-4 '>
             {filteredCategories.sort((a,b) => a.path < b.path ? -1 : 1).map((category) => {             
