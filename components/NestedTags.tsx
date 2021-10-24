@@ -32,6 +32,7 @@ export const NestedTags = ({
                                     <button
                                           className={`py-2 px-8 border-midnightBlue-light bg-midnightBlue-medium cursor:pointer underline shadow-md rounded-full border text-center text-white text-xs btn-primary focus:outline-none active:shadow-none ${zIndex}`}
                                           onClick={item.onClick}
+                                          key={item.text}
                                     >
                                           {item.text}
                                     </button>
@@ -42,6 +43,7 @@ export const NestedTags = ({
                                     <button 
                                           className={`py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2 ${zIndex}"`}
                                           onClick={item.onClick}
+                                          key={item.text}
                                     >
                                           {item.text}
                                     </button>
@@ -51,6 +53,7 @@ export const NestedTags = ({
                               <button 
                                     className={`py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-medium cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none ${zIndex}`}
                                     onClick={item.onClick}
+                                    key={item.text}
                               >
                                     {item.text}
                               </button>
