@@ -20,6 +20,14 @@ export default function Drinks() {
   }, [])
 
   useEffect(() => {
+    if(typeof tags === 'string') {
+      const appliedCategory = categories.find((c) => c.name === tags.replace('_', ' ').split(',').pop())
+      console.log(appliedCategory)
+      setFilteredCategory(appliedCategory || null)
+    }
+  }, [categories])
+
+  useEffect(() => {
     if (Array.isArray(tags)) {
       const display = tags.map((text) => text.replace('_', ' '))
       setDisplayFilters(display)
