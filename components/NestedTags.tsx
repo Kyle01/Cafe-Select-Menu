@@ -26,7 +26,14 @@ export const NestedTags = ({
           return(
             <div className='flex relative'>
                   {items.map((item, i) => {
-                        const zIndex = `z-${(items.length - i) * 10}`
+                        let zIndex = 'z-0'
+                        const calculatedZIndex = (items.length - i) * 10
+                        zIndex  = calculatedZIndex === 10 ? 'z-10' : zIndex
+                        zIndex  = calculatedZIndex === 20 ? 'z-20' : zIndex
+                        zIndex  = calculatedZIndex === 30 ? 'z-30' : zIndex
+                        zIndex  = calculatedZIndex === 40 ? 'z-40' : zIndex
+                        zIndex  = calculatedZIndex === 50 ? 'z-50' : zIndex
+                        
                         if(i === 0) {
                               return (
                                     <button
