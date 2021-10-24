@@ -26,10 +26,11 @@ export const NestedTags = ({
           return(
             <div className='flex relative'>
                   {items.map((item, i) => {
+                        const zIndex = `z-${(items.length - i) * 10}`
                         if(i === 0) {
                               return (
                                     <button
-                                          className="py-2 px-8 border-midnightBlue-light bg-midnightBlue-medium cursor:pointer underline shadow-md rounded-full border text-center text-white text-xs btn-primary focus:outline-none active:shadow-none z-20"
+                                          className={`py-2 px-8 border-midnightBlue-light bg-midnightBlue-medium cursor:pointer underline shadow-md rounded-full border text-center text-white text-xs btn-primary focus:outline-none active:shadow-none ${zIndex}`}
                                           onClick={item.onClick}
                                     >
                                           {item.text}
@@ -39,7 +40,7 @@ export const NestedTags = ({
                         if (i === items.length - 1) {
                               return ( 
                                     <button 
-                                          className={"py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"}
+                                          className={`py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2 ${zIndex}"`}
                                           onClick={item.onClick}
                                     >
                                           {item.text}
@@ -48,7 +49,7 @@ export const NestedTags = ({
                         }
                         return (
                               <button 
-                                    className={"py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none z-10"}
+                                    className={`py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-medium cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none ${zIndex}`}
                                     onClick={item.onClick}
                               >
                                     {item.text}

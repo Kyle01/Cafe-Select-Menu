@@ -83,7 +83,8 @@ export default function Drinks() {
 
   const availableFilters = _.filter(categories, (c) => {
     const currentLevel = (filteredCategory?.level || 0) 
-    return c.level === currentLevel + 1 && c.path.includes(filteredCategory?.path || '')
+    const itemCount = items.filter((i) => i.category?.path.includes(c.path)).length
+    return c.level === currentLevel + 1 && c.path.includes(filteredCategory?.path || '') && itemCount > 0
   })
 
   const filteredCategories = _.filter(categories, (c) => {
@@ -107,7 +108,6 @@ export default function Drinks() {
     if(typeof tags === 'string') {
       const appliedCategories = tags.split(',').map((text) => categories.find((c) => c.name === text))
       const currentLevel = tags.split(',').findIndex((i) => i === text)
-      console.log(currentLevel)
       if(currentLevel < 1) {
         return ({ 
             text: text, 
