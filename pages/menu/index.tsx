@@ -130,7 +130,7 @@ export default function Drinks() {
 
   return (
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
-          <div className='bg-darkGreen-medium p-4 flex'>
+          <div className='bg-darkGreen-medium p-4 flex sticky top-0' id='navbar'>
             {displayFilters.length > 0 && 
               <button 
                 className="px-1 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
