@@ -66,8 +66,13 @@ export default function Drinks() {
 
     if(category) {
       if(tags) {
-        const newUrl = `tags=${tags},${category.name.replace(' ', '_')}`
-        router.replace({pathname: routes.MENU, query: newUrl})
+        if(tags.includes(category.name) && typeof tags === 'string') {
+          const newUrl = `tags=${tags.substring(0, tags.lastIndexOf(","))}`
+          router.replace({pathname: routes.MENU, query: newUrl})
+        } else {
+          const newUrl = `tags=${tags},${category.name.replace(' ', '_')}`
+          router.replace({pathname: routes.MENU, query: newUrl})
+        }
       } else {
         router.replace({pathname: routes.MENU, query: {tags: category.name}})
       }
@@ -99,11 +104,28 @@ export default function Drinks() {
   }
 
   const displayFilterInput = displayFilters.map((text) => {
-    const category = categories.find((c) => c.name === text) || null
-    return ({ 
-      text: text, 
-      onClick: () => onSetFilter(category)
-    })
+    if(typeof tags === 'string') {
+      const appliedCategories = tags.split(',').map((text) => categories.find((c) => c.name === text))
+      const currentLevel = tags.split(',').findIndex((i) => i === text)
+      console.log(currentLevel)
+      if(currentLevel < 1) {
+        return ({ 
+            text: text, 
+            onClick: () => onSetFilter(null)
+        })
+      }
+      else {
+        return ({ 
+          text: text, 
+          onClick: () => onSetFilter(appliedCategories[currentLevel - 1] || null)
+      })
+      }
+    } else {
+      return ({ 
+        text: text, 
+        onClick: () => onSetFilter(null)
+      })
+    }
   })
 
   return (
