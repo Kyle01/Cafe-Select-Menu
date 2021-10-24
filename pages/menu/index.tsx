@@ -22,7 +22,6 @@ export default function Drinks() {
   useEffect(() => {
     if(typeof tags === 'string') {
       const appliedCategory = categories.find((c) => c.name === tags.replace('_', ' ').split(',').pop())
-      console.log(appliedCategory)
       setFilteredCategory(appliedCategory || null)
     }
   }, [categories])
