@@ -1,18 +1,41 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { supabase } from '../../utils/supabaseClient'
-import Pill from '../../components/Pill'
 import { Category, MenuItem } from '../../utils/types'
+import { NestedTags } from '../../components/NestedTags'
+import { routes } from '../../utils/routes'
 import _ from 'lodash'
 
 export default function Drinks() {
+  const router = useRouter()
   const [categories, setCategories] = useState<Array<Category>>([])
   const [items, setItems] = useState<Array<MenuItem>>([])
   const [filteredCategory, setFilteredCategory] = useState<Category | null>(null)
+  const [displayFilters, setDisplayFilters] = useState<Array<string>>([])
+  const { tags } = router.query
 
   useEffect(() => {
     fetchItems()
     fetchCategories()
   }, [])
+
+  useEffect(() => {
+    if(typeof tags === 'string') {
+      const appliedCategory = categories.find((c) => c.name === tags.replace('_', ' ').split(',').pop())
+      setFilteredCategory(appliedCategory || null)
+    }
+  }, [categories])
+
+  useEffect(() => {
+    if (Array.isArray(tags)) {
+      const display = tags.map((text) => text.replace('_', ' '))
+      setDisplayFilters(display)
+    } else if (tags) {
+      setDisplayFilters (tags.replace('_', ' ').split(','))
+    } else {
+      setDisplayFilters([])
+    }
+  }, [tags])
 
   const fetchCategories = async () => {
     let { data: categories, error } = await supabase
@@ -45,9 +68,30 @@ export default function Drinks() {
     } 
   }
 
+  const onSetFilter = (category: Category | null) => {
+    setFilteredCategory(category)
+
+    if(category) {
+      if(tags) {
+        if(tags.includes(category.name) && typeof tags === 'string') {
+          const newUrl = `tags=${tags.substring(0, tags.lastIndexOf(","))}`
+          router.replace({pathname: routes.MENU, query: newUrl})
+        } else {
+          const newUrl = `tags=${tags},${category.name.replace(' ', '_')}`
+          router.replace({pathname: routes.MENU, query: newUrl})
+        }
+      } else {
+        router.replace({pathname: routes.MENU, query: {tags: category.name}})
+      }
+    } else {
+      router.replace({pathname: routes.MENU})
+    }
+  }
+
   const availableFilters = _.filter(categories, (c) => {
     const currentLevel = (filteredCategory?.level || 0) 
-    return c.level === currentLevel + 1 && c.path.includes(filteredCategory?.path || '')
+    const itemCount = items.filter((i) => i.category?.path.includes(c.path)).length
+    return c.level === currentLevel + 1 && c.path.includes(filteredCategory?.path || '') && itemCount > 0
   })
 
   const filteredCategories = _.filter(categories, (c) => {
@@ -67,30 +111,50 @@ export default function Drinks() {
     return true
   }
 
+  const displayFilterInput = displayFilters.map((text) => {
+    if(typeof tags === 'string') {
+      const appliedCategories = tags.split(',').map((text) => categories.find((c) => c.name === text))
+      const currentLevel = tags.split(',').findIndex((i) => i === text)
+      if(currentLevel < 1) {
+        return ({ 
+            text: text, 
+            onClick: () => onSetFilter(null)
+        })
+      }
+      else {
+        return ({ 
+          text: text, 
+          onClick: () => onSetFilter(appliedCategories[currentLevel - 1] || null)
+      })
+      }
+    } else {
+      return ({ 
+        text: text, 
+        onClick: () => onSetFilter(null)
+      })
+    }
+  })
+
   return (
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
-          <div className='bg-darkGreen-medium p-4 flex'>
-            {filteredCategory && 
+          <div className='bg-darkGreen-medium p-4 flex sticky top-0' id='navbar'>
+            {displayFilters.length > 0 && 
               <button 
-                className="py-1 px-2 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
-                onClick={() => setFilteredCategory(null)}
+                className="px-1 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
+                onClick={() => onSetFilter(null)}
               >
                 X
               </button>
             }
-            {filteredCategory && 
-              <Pill
-                active={true}
-                onClick={() => setFilteredCategory(null)}
-                text={filteredCategory.name}
+            {displayFilters.length > 0 && 
+              <NestedTags
+                items={displayFilterInput}
               />
             }
             {availableFilters.map((category) => (
                 <div className='flex' key={category.id}>
-                  <Pill 
-                    active={false}
-                    onClick={() => setFilteredCategory(category)}
-                    text={category.name}
+                  <NestedTags
+                    items={[{text: category.name, onClick: () => onSetFilter(category), transparent: true}]}
                   />
                 </div>
               ))

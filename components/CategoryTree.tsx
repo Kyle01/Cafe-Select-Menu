@@ -1,6 +1,5 @@
 
 import { Category } from '../utils/types'
-import Pill from './Pill'
 
 interface Props {
     tree: Array<Category>
