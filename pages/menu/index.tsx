@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../../utils/supabaseClient'
-import Pill from '../../components/Pill'
 import { Category, MenuItem } from '../../utils/types'
 import { NestedTags } from '../../components/NestedTags'
 import { routes } from '../../utils/routes'
@@ -12,12 +11,24 @@ export default function Drinks() {
   const [categories, setCategories] = useState<Array<Category>>([])
   const [items, setItems] = useState<Array<MenuItem>>([])
   const [filteredCategory, setFilteredCategory] = useState<Category | null>(null)
+  const [displayFilters, setDisplayFilters] = useState<Array<string>>([])
   const { tags } = router.query
 
   useEffect(() => {
     fetchItems()
     fetchCategories()
   }, [])
+
+  useEffect(() => {
+    if (Array.isArray(tags)) {
+      const display = tags.map((text) => text.replace('_', ' '))
+      setDisplayFilters(display)
+    } else if (tags) {
+      setDisplayFilters (tags.replace('_', ' ').split(','))
+    } else {
+      setDisplayFilters([])
+    }
+  }, [tags])
 
   const fetchCategories = async () => {
     let { data: categories, error } = await supabase
@@ -55,7 +66,7 @@ export default function Drinks() {
 
     if(category) {
       if(tags) {
-        const newUrl = `tags=${tags},${category.name}`
+        const newUrl = `tags=${tags},${category.name.replace(' ', '_')}`
         router.replace({pathname: routes.MENU, query: newUrl})
       } else {
         router.replace({pathname: routes.MENU, query: {tags: category.name}})
@@ -87,11 +98,18 @@ export default function Drinks() {
     return true
   }
 
+  const displayFilterInput = displayFilters.map((text) => {
+    const category = categories.find((c) => c.name === text) || null
+    return ({ 
+      text: text, 
+      onClick: () => onSetFilter(category)
+    })
+  })
+
   return (
       <div className='bg-darkGreen-light m-0 w-screen h-screen'>
           <div className='bg-darkGreen-medium p-4 flex'>
-            <NestedTags items={[{text: 'Drinks'}, {text: 'Wine'}, {text: 'Red'}]} />
-            {filteredCategory && 
+            {displayFilters.length > 0 && 
               <button 
                 className="px-1 w-8 cursor:pointer shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"   
                 onClick={() => onSetFilter(null)}
@@ -99,19 +117,15 @@ export default function Drinks() {
                 X
               </button>
             }
-            {filteredCategory && 
-              <Pill
-                active={true}
-                onClick={() => onSetFilter(null)}
-                text={filteredCategory.name}
+            {displayFilters.length > 0 && 
+              <NestedTags
+                items={displayFilterInput}
               />
             }
             {availableFilters.map((category) => (
                 <div className='flex' key={category.id}>
-                  <Pill 
-                    active={false}
-                    onClick={() => onSetFilter(category)}
-                    text={category.name}
+                  <NestedTags
+                    items={[{text: category.name, onClick: () => onSetFilter(category), transparent: true}]}
                   />
                 </div>
               ))

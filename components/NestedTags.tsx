@@ -1,10 +1,11 @@
 export interface NestedTagItemType {
       text: string
       onClick?: () => void
+      transparent?: boolean
 }
 
 interface Props {
-    items: Array<NestedTagItem>
+    items: Array<NestedTagItemType>
 }
 
 export const NestedTags = ({
@@ -12,31 +13,51 @@ export const NestedTags = ({
 }: Props) => {
     if (items.length === 1) {
         return (
-            <button 
-                  className="py-1 px-4 cursor:pointer underline shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none"
+            <button
+                  className={`${items[0].transparent ? null : 'bg-midnightBlue-dark'} py-2 px-8 cursor:pointer underline shadow-md rounded-full border text-center border-white text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2`}
+                  onClick={items[0].onClick}
             >
-                  {items[0]}
+                  {items[0].text}
             </button>
         )
     }
     
-    return (
-        <div className='flex relative'>
-            <button 
-                  className={"py-2 px-8 border-midnightBlue-light bg-midnightBlue-medium cursor:pointer underline shadow-md rounded-full border text-center text-white text-xs btn-primary focus:outline-none active:shadow-none z-20"}
-            >
-                  {items[0].text}
-            </button>
-            <button 
-                  className={"py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none z-10"}
-            >
-                  {items[1].text}
-            </button>
-            <button 
-                  className={"py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"}
-            >
-                  {items[2].text}
-            </button>
-        </div>
-    )
+    if (items.length > 1) {
+          return(
+            <div className='flex relative'>
+                  {items.map((item, i) => {
+                        if(i === 0) {
+                              return (
+                                    <button
+                                          className="py-2 px-8 border-midnightBlue-light bg-midnightBlue-medium cursor:pointer underline shadow-md rounded-full border text-center text-white text-xs btn-primary focus:outline-none active:shadow-none z-20"
+                                          onClick={item.onClick}
+                                    >
+                                          {item.text}
+                                    </button>
+                              )
+                        }
+                        if (i === items.length - 1) {
+                              return ( 
+                                    <button 
+                                          className={"py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none mr-2"}
+                                          onClick={item.onClick}
+                                    >
+                                          {item.text}
+                                    </button>
+                              )
+                        }
+                        return (
+                              <button 
+                                    className={"py-2 px-8 -ml-4 border-midnightBlue-light bg-midnightBlue-dark cursor:pointer underline shadow-md rounded-r-2xl border-r border-t border-b text-center text-white text-xs btn-primary focus:outline-none active:shadow-none z-10"}
+                                    onClick={item.onClick}
+                              >
+                                    {item.text}
+                              </button>
+                        )
+                  })}
+            </div>
+          )
+    }
+
+    return null
 }
