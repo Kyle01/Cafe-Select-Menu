@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Wallpaper from '../../public/homeWallpaper.jpg'
 import { routes } from '../../utils/routes'
-import { route } from 'next/dist/server/router'
+
 export default function Home() {
   return (
     <div className='overflow-hidden'>

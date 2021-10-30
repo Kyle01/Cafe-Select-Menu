@@ -190,5 +190,6 @@ export async function getStaticProps() {
       queryItems,
       queryCategories,
     },
+    revalidate: 60
   }
 }
