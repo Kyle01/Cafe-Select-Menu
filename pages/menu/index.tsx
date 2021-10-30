@@ -6,7 +6,12 @@ import { NestedTags } from '../../components/NestedTags'
 import { routes } from '../../utils/routes'
 import _ from 'lodash'
 
-export default function Drinks() {
+type Props = {
+  queryItems: MenuItem[]
+  queryCategories: Category[]
+}
+
+export default function Drinks({ queryItems, queryCategories }: Props) {
   const router = useRouter()
   const [categories, setCategories] = useState<Array<Category>>([])
   const [items, setItems] = useState<Array<MenuItem>>([])
@@ -15,8 +20,8 @@ export default function Drinks() {
   const { tags } = router.query
 
   useEffect(() => {
-    fetchItems()
-    fetchCategories()
+    setCategories(queryCategories)
+    setItems(queryItems)
   }, [])
 
   useEffect(() => {
@@ -36,37 +41,6 @@ export default function Drinks() {
       setDisplayFilters([])
     }
   }, [tags])
-
-  const fetchCategories = async () => {
-    let { data: categories, error } = await supabase
-      .from<Category>('category')
-      .select('*')
-      .order('id')
-    if (error) console.log('error', error)
-    else setCategories(categories || [])
-  }
-
-  const fetchItems = async () => {
-    let { data: items, error } = await supabase
-      .from<MenuItem>('menu_item')
-      .select(`
-        id,
-        name,
-        description,
-        category (
-          id,
-          name,
-          path,
-          level,
-          has_header
-        )
-      `)
-      .order('id')
-    if (error) console.log('error', error)
-    else if(items) {
-      setItems(items)
-    } 
-  }
 
   const onSetFilter = (category: Category | null) => {
     setFilteredCategory(category)
@@ -184,4 +158,37 @@ export default function Drinks() {
           </div>
       </div>
   )
+}
+
+export async function getStaticProps() {
+  let { data: categories } = await supabase
+      .from<Category>('category')
+      .select('*')
+      .order('id')
+
+  let { data: items } = await supabase
+    .from<MenuItem>('menu_item')
+    .select(`
+      id,
+      name,
+      description,
+      category (
+        id,
+        name,
+        path,
+        level,
+        has_header
+      )
+    `)
+    .order('id')
+  
+  const queryItems = items 
+  const queryCategories = categories
+
+  return {
+    props: {
+      queryItems,
+      queryCategories,
+    },
+  }
 }
