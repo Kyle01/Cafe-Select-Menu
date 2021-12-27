@@ -1,5 +1,5 @@
 import Head from "next/head";
-import openGraphImage from '../../public/openGraph.png'
+import openGraphImage from '../public/openGraph.png'
 
 type Props = {
     children: JSX.Element
