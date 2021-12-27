@@ -1,4 +1,5 @@
 import Head from "next/head";
+import openGraphImage from '../public/openGraph.png'
 
 type Props = {
     children: JSX.Element
@@ -8,6 +9,7 @@ export default function Layout({ children }: Props) {
     return (
       <div>
         <Head>
+            <meta property="og:image" content={openGraphImage.src} key="ogimage" />
             <link
               rel="preload"
               href="/fonts/Berolina.ttf"

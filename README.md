@@ -20,13 +20,13 @@ While there are much easier ways to build a menu, I wanted to build something in
 * ltree for filtering - Postgres 9 has a built in datatype called `ltree` that allows for native tree like structures. This was utilized to make the nested categories. Documentation for ltrees can be [found here](https://www.postgresql.org/docs/9.1/ltree.html).
 
 ## Getting Started
-I'm currently not accepting merge request. If you'd like to play with the repo yourself: 
-* Clone the repo `git clone`
+I'm currently not accepting merge requests. If you'd like to play with the repo yourself: 
+* Clone the repo with `git clone`
 * Integrate with Vercel
 * Integrate with supabase
 * Run all migrations in order found in the [migration folder](./migrations)
-* Begin server `npm run dev` 
-* Open with [http://localhost:3000](http://localhost:3000) with your browser
+* Begin server by running `npm run dev` 
+* Go to [http://localhost:3000](http://localhost:3000) with your browser
 
 ## Next steps 
 * I'd like to build out the local recommendations using a Google maps integration that would display if a local attraction/restaurant is open. 
